@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <title>AIDG Rapid test kit generator</title>
+</head>
+<body>
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+  <div class="wrapper">
+    <div id="qrcode-container">
+      <div id="qrcode"></div>
+    </div>
+
+    
+    <form class="form">
+      <input type="url" id="kitId" name="kitId" placeholder="Paste kit id" required />
+
+      <div class="form-options">
+        <div>Select test result type</div>
+        <input type="radio" id="choice1" name="test-type" value="negative" checked>
+        <label for="choice1">Negative</label>
+        <br>
+        <input type="radio" id="choice2" name="test-type" value="positive">
+        <label for="choice2">Positive</label>
+        <br>
+        <input type="radio" id="choice3" name="test-type" value="invalid">
+        <label for="choice3">Invalid</label>
+      </div>
+
+      <button type="button" onclick="generateQRCode()">
+        Generate
+      </button>
+    </form>
+  </div>
+
+  <script type="text/javascript">
+    function generateQRCode() {
+      const kitId = document.getElementById("kitId").value;
+      const testType = document.querySelector('input[name="test-type"]:checked').value;
+
+      if (kitId && testType) {
+        const qrcodeContainer = document.getElementById("qrcode");
+        qrcodeContainer.innerHTML = "";
+
+        new QRCode(qrcodeContainer, {
+          text: kitId,
+          width: 512,
+          height: 512,
+        });
+
+        const el = document.getElementById("qrcode-container");
+        el.style.display = "block";
+        el.className = "";
+
+        switch(testType) {
+          case "negative":
+            el.classList.add("qrcode-container-negative");
+            break;
+          case "positive":
+            el.classList.add("qrcode-container-positive");
+            break;
+          case "invalid":
+            el.classList.add("qrcode-container-invalid");
+            break;
+        }
+
+      } else {
+        alert("Please enter some string");
+      }
+    }
+  </script>
+</body>
+</html>
